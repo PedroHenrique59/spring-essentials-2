@@ -1,4 +1,4 @@
-package academy.devdojo.springboot2;
+package academy.devdojo.springboot2.domain;
 
 public class Anime {
 
