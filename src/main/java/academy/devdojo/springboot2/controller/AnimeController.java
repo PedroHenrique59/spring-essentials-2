@@ -22,6 +22,6 @@ public class AnimeController {
     @GetMapping(path = "list")
     public List<Anime> list() {
         log.info(dateUtil.formatLocalDateTimeToDataBaseStyle(LocalDateTime.now()));
-        return List.of(new Anime("DBZ"), new Anime("Bersek"));
+        return List.of(new Anime("aaa"), new Anime("Bersek"));
     }
 }
