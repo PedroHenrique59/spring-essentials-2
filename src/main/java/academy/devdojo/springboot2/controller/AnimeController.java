@@ -4,7 +4,6 @@ import academy.devdojo.springboot2.domain.Anime;
 import academy.devdojo.springboot2.requests.AnimePostRequestBody;
 import academy.devdojo.springboot2.requests.AnimePutRequestBody;
 import academy.devdojo.springboot2.service.AnimeService;
-import academy.devdojo.springboot2.util.DateUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -39,6 +38,11 @@ public class AnimeController {
         return new ResponseEntity<>(animeService.findById(id), HttpStatus.OK);
     }
 
+    @GetMapping(path = "/find")
+    public ResponseEntity<List<Anime>> findByName(@RequestParam String name) {
+        return new ResponseEntity<>(animeService.findByName(name), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<Anime> save(@RequestBody @Valid AnimePostRequestBody animePostRequestBody) {
         return new ResponseEntity<>(animeService.save(animePostRequestBody), HttpStatus.CREATED);
@@ -54,11 +58,6 @@ public class AnimeController {
     public ResponseEntity<Void> replace(@RequestBody AnimePutRequestBody animePutRequestBody) {
         animeService.replace(animePutRequestBody);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @GetMapping(path = "/find")
-    public ResponseEntity<List<Anime>> findByName(@RequestParam String name) {
-        return new ResponseEntity<>(animeService.findByName(name), HttpStatus.OK);
     }
 
 }
