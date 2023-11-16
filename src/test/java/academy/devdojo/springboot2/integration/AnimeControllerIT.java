@@ -14,9 +14,11 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.test.annotation.DirtiesContext;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureTestDatabase
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class AnimeControllerIT {
 
     @Autowired
@@ -45,5 +47,20 @@ public class AnimeControllerIT {
 
         Assertions.assertThat(animePage.toList().get(0).getName()).isEqualTo(expectedName);
     }
+
+    @Test
+    @DisplayName("findById returns anime when successful")
+    public void findById_ReturnsAnime_WhenSuccessful() {
+        Anime savedAnime = animeRepository.save(AnimeCreator.createAnimeToBeSaved());
+
+        Long expectedId = savedAnime.getId();
+
+        Anime anime = testRestTemplate.getForObject("/animes/{id}", Anime.class, expectedId);
+
+        Assertions.assertThat(anime).isNotNull();
+
+        Assertions.assertThat(anime.getId()).isNotNull().isEqualTo(expectedId);
+    }
+
 
 }
