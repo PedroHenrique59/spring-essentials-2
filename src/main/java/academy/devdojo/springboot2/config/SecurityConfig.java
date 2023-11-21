@@ -1,5 +1,7 @@
 package academy.devdojo.springboot2.config;
 
+import academy.devdojo.springboot2.service.DevDojoUserDetailsService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -13,7 +15,10 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 @EnableWebSecurity
 @Log4j2
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final DevDojoUserDetailsService devDojoUserDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -32,15 +37,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        //log.info("Password encoded {}", passwordEncoder.encode("test"));
+        log.info("Password encoded {}", passwordEncoder.encode("academy"));
 
-        auth.inMemoryAuthentication()
-                .withUser("pedro")
-                .password(passwordEncoder.encode("test"))
-                .roles("USER", "ADMIN")
-                .and()
-                .withUser("pedro 2")
-                .password(passwordEncoder.encode("test 2"))
-                .roles("USER");
+// AUTH in MEMORY
+//        auth.inMemoryAuthentication()
+//                .withUser("pedro")
+//                .password(passwordEncoder.encode("test"))
+//                .roles("USER", "ADMIN")
+//                .and()
+//                .withUser("pedro 2")
+//                .password(passwordEncoder.encode("test 2"))
+//                .roles("USER");
+
+        auth.userDetailsService(devDojoUserDetailsService).passwordEncoder(passwordEncoder);
+
     }
 }
